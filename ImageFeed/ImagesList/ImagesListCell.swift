@@ -15,4 +15,11 @@ final class ImagesListCell: UITableViewCell {
     @IBOutlet  weak var feedImageView: UIImageView!
     @IBOutlet weak var photoDate: UILabel!
     @IBOutlet weak var likeButton: UIButton!
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        let padding = UIEdgeInsets(top: 4, left: 0, bottom: 4, right: 0)
+        contentView.frame = contentView.frame.inset(by: padding)
+    }
 }
