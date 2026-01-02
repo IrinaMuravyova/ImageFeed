@@ -34,13 +34,6 @@
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                 </imageView>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="NoActive" translatesAutoresizingMaskIntoConstraints="NO" id="fqf-WD-1Rc">
-                                                    <rect key="frame" x="349" y="0.0" width="44" height="44"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="44" id="AeF-cK-Inr"/>
-                                                        <constraint firstAttribute="width" constant="44" id="hjI-KA-xdf"/>
-                                                    </constraints>
-                                                </imageView>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cub-JS-JkQ" customClass="GradientView" customModule="ImageFeed" customModuleProvider="target">
                                                     <rect key="frame" x="0.0" y="155" width="393" height="30"/>
                                                     <constraints>
@@ -56,20 +49,29 @@
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yIh-Qe-UhJ" userLabel="LikeButton">
+                                                    <rect key="frame" x="349" y="0.0" width="44" height="44"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="44" id="3cf-Lu-emQ"/>
+                                                        <constraint firstAttribute="height" constant="44" id="sav-bj-zNT"/>
+                                                    </constraints>
+                                                    <state key="normal" title="Button"/>
+                                                    <buttonConfiguration key="configuration" style="plain" image="Active"/>
+                                                </button>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="fqf-WD-1Rc" firstAttribute="top" secondItem="A0L-MO-HY3" secondAttribute="top" id="585-PD-I56"/>
                                                 <constraint firstItem="b5o-lh-EGS" firstAttribute="leading" secondItem="cub-JS-JkQ" secondAttribute="leading" constant="8" id="5nM-jn-Lcy"/>
                                                 <constraint firstItem="dlf-Ej-LCn" firstAttribute="trailing" secondItem="b5o-lh-EGS" secondAttribute="trailing" id="5nt-D5-EI6"/>
                                                 <constraint firstItem="dlf-Ej-LCn" firstAttribute="top" secondItem="A0L-MO-HY3" secondAttribute="top" id="APp-US-G0q"/>
-                                                <constraint firstAttribute="trailing" secondItem="fqf-WD-1Rc" secondAttribute="trailing" id="MKT-RR-kFR"/>
                                                 <constraint firstItem="cub-JS-JkQ" firstAttribute="leading" secondItem="A0L-MO-HY3" secondAttribute="leading" id="NMP-lg-cY9"/>
+                                                <constraint firstItem="yIh-Qe-UhJ" firstAttribute="top" secondItem="A0L-MO-HY3" secondAttribute="top" id="RmX-HN-sGi"/>
                                                 <constraint firstItem="cub-JS-JkQ" firstAttribute="bottom" secondItem="b5o-lh-EGS" secondAttribute="bottom" constant="6" id="Uak-Zc-BwM"/>
                                                 <constraint firstAttribute="trailing" secondItem="cub-JS-JkQ" secondAttribute="trailing" id="Wsk-2X-knx"/>
                                                 <constraint firstAttribute="trailing" secondItem="dlf-Ej-LCn" secondAttribute="trailing" id="YjA-7i-r2h"/>
                                                 <constraint firstAttribute="bottom" secondItem="dlf-Ej-LCn" secondAttribute="bottom" id="fxV-n6-rn3"/>
                                                 <constraint firstAttribute="bottom" secondItem="cub-JS-JkQ" secondAttribute="bottom" id="gsk-22-TJu"/>
                                                 <constraint firstItem="dlf-Ej-LCn" firstAttribute="leading" secondItem="A0L-MO-HY3" secondAttribute="leading" id="nYy-d2-aed"/>
+                                                <constraint firstAttribute="trailing" secondItem="yIh-Qe-UhJ" secondAttribute="trailing" id="vUk-8V-3wd"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" red="0.1019607843" green="0.1058823529" blue="0.1333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -105,6 +107,6 @@
     </scenes>
     <resources>
         <image name="0" width="1600" height="1059"/>
-        <image name="NoActive" width="44" height="44"/>
+        <image name="Active" width="44" height="44"/>
     </resources>
 </document>
