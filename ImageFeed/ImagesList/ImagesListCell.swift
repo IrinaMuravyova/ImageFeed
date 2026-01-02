@@ -19,7 +19,7 @@ final class ImagesListCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        let padding = UIEdgeInsets(top: 4, left: 0, bottom: 4, right: 0)
+        let padding = UIEdgeInsets(top: 4, left: 16, bottom: 4, right:  16)
         contentView.frame = contentView.frame.inset(by: padding)
     }
 }

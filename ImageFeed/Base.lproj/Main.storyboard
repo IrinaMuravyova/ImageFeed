@@ -2,7 +2,9 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -17,7 +19,7 @@
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="N9l-rc-Brl">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                                <color key="backgroundColor" red="0.1019607843" green="0.1058823529" blue="0.1333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" name="DarkBackground"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ImagesListCell" rowHeight="185" id="wwR-jr-YrZ" customClass="ImagesListCell" customModule="ImageFeed" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="50" width="393" height="185"/>
@@ -59,6 +61,7 @@
                                                     <buttonConfiguration key="configuration" style="plain" image="Active"/>
                                                 </button>
                                             </subviews>
+                                            <color key="backgroundColor" name="DarkBackground"/>
                                             <constraints>
                                                 <constraint firstItem="b5o-lh-EGS" firstAttribute="leading" secondItem="cub-JS-JkQ" secondAttribute="leading" constant="8" id="5nM-jn-Lcy"/>
                                                 <constraint firstItem="dlf-Ej-LCn" firstAttribute="trailing" secondItem="b5o-lh-EGS" secondAttribute="trailing" id="5nt-D5-EI6"/>
@@ -74,7 +77,7 @@
                                                 <constraint firstAttribute="trailing" secondItem="yIh-Qe-UhJ" secondAttribute="trailing" id="vUk-8V-3wd"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" red="0.1019607843" green="0.1058823529" blue="0.1333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" name="DarkBackground"/>
                                         <connections>
                                             <outlet property="feedImageView" destination="dlf-Ej-LCn" id="2WE-uC-rkN"/>
                                             <outlet property="gradientView" destination="cub-JS-JkQ" id="gr9-uM-dDZ"/>
@@ -90,12 +93,12 @@
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" name="DarkBackground"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="N9l-rc-Brl" secondAttribute="trailing" id="1rv-Hi-9HV"/>
+                            <constraint firstAttribute="trailing" secondItem="N9l-rc-Brl" secondAttribute="trailing" id="1rv-Hi-9HV"/>
                             <constraint firstItem="N9l-rc-Brl" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="BDG-7w-pTV"/>
                             <constraint firstAttribute="bottom" secondItem="N9l-rc-Brl" secondAttribute="bottom" id="TDC-ZN-OVz"/>
-                            <constraint firstItem="N9l-rc-Brl" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="kAj-I1-YoB"/>
+                            <constraint firstItem="N9l-rc-Brl" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="kAj-I1-YoB"/>
                         </constraints>
                     </view>
                     <connections>
@@ -110,5 +113,8 @@
     <resources>
         <image name="0" width="1600" height="1059"/>
         <image name="Active" width="44" height="44"/>
+        <namedColor name="DarkBackground">
+            <color red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>

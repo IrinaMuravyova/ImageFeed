@@ -37,6 +37,8 @@ class ImagesListViewController: UIViewController {
         cell.likeButton.imageView?.image = indexPath.row % 2 == 0 ?
             UIImage(named: "Active") :
             UIImage(named: "NoActive")
+        
+        cell.selectionStyle = .none
     }
 }
 
