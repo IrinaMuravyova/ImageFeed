@@ -78,6 +78,8 @@
                                         <connections>
                                             <outlet property="feedImageView" destination="dlf-Ej-LCn" id="2WE-uC-rkN"/>
                                             <outlet property="gradientView" destination="cub-JS-JkQ" id="gr9-uM-dDZ"/>
+                                            <outlet property="likeButton" destination="yIh-Qe-UhJ" id="Qdv-lf-Lih"/>
+                                            <outlet property="photoDate" destination="b5o-lh-EGS" id="l0V-DQ-mHM"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
