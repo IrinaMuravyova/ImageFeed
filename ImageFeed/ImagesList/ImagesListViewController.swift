@@ -7,10 +7,13 @@
 
 import UIKit
 
-class ImagesListViewController: UIViewController {
-    @IBOutlet private var tableView: UITableView!
+// MARK: - ImagesListViewController
+final class ImagesListViewController: UIViewController {
+    // MARK: - IBOutlets
+    @IBOutlet private weak var tableView: UITableView!
     
-    private let photosName: [String] = Array(0...19).map{"\($0)"}
+    // MARK: - Properties
+    private let photosName: [String] = Array(0...19).map(String.init)
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .long
@@ -18,13 +21,14 @@ class ImagesListViewController: UIViewController {
         return formatter
     }()
     
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
+        setupTableView()
     }
 
-    func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
+    // MARK: - Private Methods
+    private func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
         let imageName = String(indexPath.row)
         
         guard let photo = UIImage(named: imageName) else {
@@ -40,8 +44,13 @@ class ImagesListViewController: UIViewController {
         
         cell.selectionStyle = .none
     }
+    
+    private func setupTableView() {
+        tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
+    }
 }
 
+// MARK: - UITableViewDataSource
 extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         photosName.count
@@ -63,6 +72,7 @@ extension ImagesListViewController: UITableViewDataSource {
     
 }
 
+// MARK: - UITableViewDelegate
 extension ImagesListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let photo = UIImage(named: String(indexPath.row))
