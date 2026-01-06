@@ -4,11 +4,10 @@
 //
 //  Created by Irina Muravyeva on 04.01.2026.
 //
-
-<<<<<<< Updated upstream
 import UIKit
 
-class SingleImageViewController: UIViewController {
+final class SingleImageViewController: UIViewController {
+    // MARK: - Constants
     var image: UIImage? {
         didSet {
             guard isViewLoaded else { return }
@@ -21,9 +20,11 @@ class SingleImageViewController: UIViewController {
         }
     }
     
+    // MARK: - IBOutlets
     @IBOutlet private weak var imageView: UIImageView!
     @IBOutlet weak var scrollView: UIScrollView!
     
+    // MARK: - LifeCircle
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -39,10 +40,11 @@ class SingleImageViewController: UIViewController {
         scrollView.maximumZoomScale = 1.25
     }
     
+    // MARK: - IBActions
     @IBAction private func didTapBackButton() {
         dismiss(animated: true)
     }
-    @IBAction func didTapShareButton() {
+    @IBAction private func didTapShareButton() {
         guard let image else { return }
         
         let activityViewController = UIActivityViewController(
@@ -53,6 +55,7 @@ class SingleImageViewController: UIViewController {
         present(activityViewController, animated: true, completion: nil)
     }
     
+    // MARK: - Public functions
     func scrollViewDidEndZooming(
         _ scrollView: UIScrollView,
         with view: UIView?,
@@ -106,6 +109,3 @@ extension SingleImageViewController: UIScrollViewDelegate {
         imageView
     }
 }
-=======
-import Foundation
->>>>>>> Stashed changes
