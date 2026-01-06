@@ -5,6 +5,7 @@
 //  Created by Irina Muravyeva on 04.01.2026.
 //
 
+<<<<<<< Updated upstream
 import UIKit
 
 class SingleImageViewController: UIViewController {
@@ -105,3 +106,6 @@ extension SingleImageViewController: UIScrollViewDelegate {
         imageView
     }
 }
+=======
+import Foundation
+>>>>>>> Stashed changes
