@@ -11,7 +11,6 @@ final class SingleImageViewController: UIViewController {
     var image: UIImage? {
         didSet {
             guard isViewLoaded else { return }
-            guard let image = image else { return }
             updateImage()
         }
     }
@@ -23,10 +22,8 @@ final class SingleImageViewController: UIViewController {
     // MARK: - LifeCircle
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        guard let image = image else { return }
-        setupScrollView()
         updateImage()
+        setupScrollView()
     }
     
     // MARK: - IBActions
