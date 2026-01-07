@@ -11,33 +11,22 @@ final class SingleImageViewController: UIViewController {
     var image: UIImage? {
         didSet {
             guard isViewLoaded else { return }
-            guard let image = image else {
-                assertionFailure("Can't rescale and center without image")
-                return
-            }
-            imageView.image = image
-            rescaleAndCenterImageInScrollView(image)
+            guard let image = image else { return }
+            updateImage()
         }
     }
     
     // MARK: - IBOutlets
     @IBOutlet private weak var imageView: UIImageView!
-    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet private weak var scrollView: UIScrollView!
     
     // MARK: - LifeCircle
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        guard let image = image else {
-            assertionFailure("Can't rescale and center without image")
-            return
-        }
-        imageView.image = image
-        imageView.frame.size = image.size
-        rescaleAndCenterImageInScrollView(image)
-        
-        scrollView.minimumZoomScale = 0.1
-        scrollView.maximumZoomScale = 1.25
+        guard let image = image else { return }
+        setupScrollView()
+        updateImage()
     }
     
     // MARK: - IBActions
@@ -66,6 +55,21 @@ final class SingleImageViewController: UIViewController {
     }
     
     // MARK: - Private functions
+    private func setupScrollView() {
+        scrollView.minimumZoomScale = 0.1
+        scrollView.maximumZoomScale = 1.25
+        scrollView.delegate = self
+    }
+    
+    private func updateImage() {
+        guard let image else { return }
+
+        imageView.image = image
+        imageView.frame.size = image.size
+        rescaleAndCenterImageInScrollView(image)
+    }
+    
+    // MARK: - Zoom handling
     private func rescaleAndCenterImageInScrollView(_ image: UIImage) {
         let minZoomScale = scrollView.minimumZoomScale
         let maxZoomScale = scrollView.maximumZoomScale
