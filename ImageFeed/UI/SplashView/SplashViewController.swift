@@ -58,7 +58,41 @@ extension SplashViewController: AuthViewControllerDelegate {
         }
         
         let tabBarController = UIStoryboard(name: "Main", bundle: .main)
-            .instantiateViewController(withIdentifier: "TabBarViewController")
+            .instantiateViewController(withIdentifier: "TabBarViewController") as! UITabBarController
+            
+        setupTabBarAppearance(tabBarController.tabBar)
         window.rootViewController = tabBarController
     }
+    
+    private func setupTabBarAppearance(_ tabBar: UITabBar) {
+        if #available(iOS 15.0, *) {
+            let appearance = UITabBarAppearance()
+            appearance.configureWithOpaqueBackground()
+            appearance.backgroundColor = .darkBackground
+            
+            tabBar.standardAppearance = appearance
+            tabBar.scrollEdgeAppearance = appearance
+            
+        } else {
+            tabBar.barTintColor = .darkBackground
+            tabBar.isTranslucent = false
+        }
+    }
+
+    private func fixTabBarAppearance(_ tabBar: UITabBar) {
+        tabBar.setNeedsLayout()
+        tabBar.layoutIfNeeded()
+        
+        if #available(iOS 15.0, *) {
+            DispatchQueue.main.async {
+                let appearance = UITabBarAppearance()
+                appearance.configureWithOpaqueBackground()
+                appearance.backgroundColor = .darkBackground
+                
+                tabBar.standardAppearance = appearance
+                tabBar.scrollEdgeAppearance = appearance
+            }
+        }
+    }
 }
+
