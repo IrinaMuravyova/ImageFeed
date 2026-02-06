@@ -16,7 +16,9 @@ final class OAuth2Service {
         handler: @escaping (Result<String, Error>) -> Void) {
 
         guard let request = makeOAuthTokenRequest(code: code) else {
-            handler(.failure(NetworkError.invalidRequest))
+            DispatchQueue.main.async {
+                handler(.failure(NetworkError.invalidRequest))
+            }
             return
         }
 
