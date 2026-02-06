@@ -34,6 +34,10 @@ final class AuthViewController: UIViewController {
                 assertionFailure("Failed to prepare for \(showWebViewSegueIdentifier)")
                 return
             }
+            
+            webViewViewController.modalPresentationStyle = .fullScreen
+            webViewViewController.isModalInPresentation = true
+            
             webViewViewController.delegate = self
         } else {
             super.prepare(for: segue, sender: sender)
