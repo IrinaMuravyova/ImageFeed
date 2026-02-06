@@ -57,8 +57,11 @@ extension SplashViewController: AuthViewControllerDelegate {
             return
         }
         
-        let tabBarController = UIStoryboard(name: "Main", bundle: .main)
-            .instantiateViewController(withIdentifier: "TabBarViewController") as! UITabBarController
+        guard let tabBarController = UIStoryboard(name: "Main", bundle: .main)
+            .instantiateViewController(withIdentifier: "TabBarViewController") as? UITabBarController else {
+            assertionFailure("Failed to instantiate TabBarViewController")
+            return
+        }
             
         setupTabBarAppearance(tabBarController.tabBar)
         window.rootViewController = tabBarController
