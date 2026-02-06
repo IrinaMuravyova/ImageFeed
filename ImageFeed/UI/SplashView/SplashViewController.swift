@@ -38,6 +38,10 @@ extension SplashViewController {
                 assertionFailure("Failed to prepare for \(showAuthenticationScreenSegueIdentifier)")
                 return
             }
+            
+            navigationController.modalPresentationStyle = .fullScreen
+            navigationController.isModalInPresentation = true
+            
             viewController.delegate = self
         } else {
             super.prepare(for: segue, sender: sender)
