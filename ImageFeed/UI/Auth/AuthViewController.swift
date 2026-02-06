@@ -12,6 +12,8 @@ protocol AuthViewControllerDelegate: AnyObject {
 } 
 
 final class AuthViewController: UIViewController {
+    @IBOutlet weak var loginButton: UIButton!
+    
     private let showWebViewSegueIdentifier = "ShowWebView"
     private let oauth2Service = OAuth2Service.shared
     private let oauth2Storage = OAuth2TokenStorage.shared
@@ -21,6 +23,7 @@ final class AuthViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureBackButton()
+        configureLoginButton()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -43,6 +46,19 @@ final class AuthViewController: UIViewController {
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         navigationItem.backBarButtonItem?.tintColor = UIColor(named: "DarkBackground")
     }
+    
+    private func configureLoginButton() {
+        loginButton.layer.cornerRadius = 16
+
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.systemFont(ofSize: 17, weight: .bold)
+        ]
+        let attributedTitle = NSAttributedString(
+            string: "Войти",
+            attributes: attributes
+        )
+        loginButton.setAttributedTitle(attributedTitle, for: .normal)
+    }
 }
 
 extension AuthViewController: WebViewViewControllerDelegate {
@@ -50,8 +66,6 @@ extension AuthViewController: WebViewViewControllerDelegate {
         _ vc: WebViewViewController,
         didAuthenticateWithCode code: String
     ) {
-        
-        
         oauth2Service.fetchOAuthToken(code) { [weak self] result in
             guard let self else { return }
 

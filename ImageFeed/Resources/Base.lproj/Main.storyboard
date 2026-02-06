@@ -35,8 +35,7 @@
                                     <attributedString key="attributedTitle">
                                         <fragment content="Войти">
                                             <attributes>
-                                                <font key="NSFont" size="17" name="SFPro-Regular"/>
-                                                <font key="NSOriginalFont" size="12" name="Helvetica"/>
+                                                <font key="NSFont" size="17" name="SFPro-Bold"/>
                                             </attributes>
                                         </fragment>
                                     </attributedString>
@@ -68,6 +67,9 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="v9u-P9-uME"/>
+                    <connections>
+                        <outlet property="loginButton" destination="MYa-AF-xjl" id="Zcg-rN-qfa"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="i8j-cM-23M" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
