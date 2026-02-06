@@ -22,7 +22,7 @@ protocol WebViewViewControllerDelegate: AnyObject {
 final class WebViewViewController: UIViewController {
     @IBOutlet private var progressView: UIProgressView!
     
-    private var webView: WKWebView!
+    private var webView: WKWebView?
     weak var delegate: WebViewViewControllerDelegate?
     
     override func viewDidLoad() {
@@ -33,6 +33,10 @@ final class WebViewViewController: UIViewController {
         
         webView = WKWebView(frame: .zero, configuration: configuration)
         
+        guard let webView else {
+            assertionFailure("Failed to instantiate WKWebView")
+            return
+        }
         webView.translatesAutoresizingMaskIntoConstraints = false
 
         view.insertSubview(webView, belowSubview: progressView)
@@ -57,7 +61,7 @@ final class WebViewViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        webView.addObserver(
+        webView?.addObserver(
             self,
             forKeyPath: #keyPath(WKWebView.estimatedProgress),
             options: .new,
@@ -67,7 +71,7 @@ final class WebViewViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), context: nil)
+        webView?.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), context: nil)
     }
     
     override func observeValue(
@@ -84,6 +88,11 @@ final class WebViewViewController: UIViewController {
     }
     
     private func updateProgress() {
+        guard let webView else {
+            assertionFailure("Failed to instantiate WKWebView")
+            return
+        }
+        
         progressView.progress = Float(webView.estimatedProgress)
         progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
     }
@@ -105,7 +114,7 @@ final class WebViewViewController: UIViewController {
         }
         
         let request = URLRequest(url: url)
-        webView.load(request) 
+        webView?.load(request) 
     }
 }
 
