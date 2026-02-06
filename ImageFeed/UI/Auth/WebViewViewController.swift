@@ -20,11 +20,16 @@ protocol WebViewViewControllerDelegate: AnyObject {
 }
 
 final class WebViewViewController: UIViewController {
+    // MARK: - IB Outlets
     @IBOutlet private var progressView: UIProgressView!
     
-    private var webView: WKWebView?
+    // MARK: - Public Properties
     weak var delegate: WebViewViewControllerDelegate?
     
+    // MARK: - Private Properties
+    private var webView: WKWebView?
+    
+    // MARK: - View Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -54,10 +59,6 @@ final class WebViewViewController: UIViewController {
         updateProgress()
     }
     
-    @IBAction private func didTapBackButton(_ sender: Any?) {
-        delegate?.webViewViewControllerDidCancel(self)
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
@@ -74,6 +75,7 @@ final class WebViewViewController: UIViewController {
         webView?.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), context: nil)
     }
     
+    // MARK: - Overrides Methods
     override func observeValue(
         forKeyPath keyPath: String?,
         of object: Any?,
@@ -87,6 +89,12 @@ final class WebViewViewController: UIViewController {
         }
     }
     
+    // MARK: - IB Actions
+    @IBAction private func didTapBackButton(_ sender: Any?) {
+        delegate?.webViewViewControllerDidCancel(self)
+    }
+    
+    // MARK: - Private Functions
     private func updateProgress() {
         guard let webView else {
             assertionFailure("Failed to instantiate WKWebView")
@@ -114,10 +122,11 @@ final class WebViewViewController: UIViewController {
         }
         
         let request = URLRequest(url: url)
-        webView?.load(request) 
+        webView?.load(request)
     }
 }
 
+// MARK: - WKNavigationDelegate
 extension WebViewViewController: WKNavigationDelegate {
     func webView(
         _ webView: WKWebView,

@@ -8,9 +8,16 @@
 import UIKit
 
 final class SplashViewController: UIViewController {
+    // MARK: - Public Properties
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        .lightContent
+    }
+    
+    // MARK: - Private Properties
     private let showAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
     private let storage = OAuth2TokenStorage.shared
     
+    // MARK: - View Life Cycles
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
        
@@ -22,12 +29,9 @@ final class SplashViewController: UIViewController {
                 sender: nil)
         }
     }
-
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        .lightContent
-    }
 }
 
+// MARK: - Auth Navigation
 extension SplashViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == showAuthenticationScreenSegueIdentifier {
@@ -49,6 +53,7 @@ extension SplashViewController {
     }
 }
 
+// MARK: - AuthViewControllerDelegate
 extension SplashViewController: AuthViewControllerDelegate {
     func didAuthenticate(_ vc: AuthViewController) {
         vc.dismiss(animated: true)

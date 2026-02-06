@@ -12,20 +12,25 @@ protocol AuthViewControllerDelegate: AnyObject {
 } 
 
 final class AuthViewController: UIViewController {
+    // MARK: - IB Outlets
     @IBOutlet weak var loginButton: UIButton!
     
+    // MARK: - Public Properties
+    weak var delegate: AuthViewControllerDelegate?
+    
+    // MARK: - Private Properties
     private let showWebViewSegueIdentifier = "ShowWebView"
     private let oauth2Service = OAuth2Service.shared
     private let oauth2Storage = OAuth2TokenStorage.shared
     
-    weak var delegate: AuthViewControllerDelegate?
-    
+    // MARK: - View Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
         configureBackButton()
         configureLoginButton()
     }
     
+    // MARK: - Overrides Methods
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == showWebViewSegueIdentifier {
             guard
@@ -44,6 +49,7 @@ final class AuthViewController: UIViewController {
         }
     }
     
+    // MARK: - Private Methods
     private func configureBackButton() {
         navigationController?.navigationBar.backIndicatorImage = UIImage(named: "nav_back_button")
         navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(named: "nav_back_button")
@@ -65,6 +71,7 @@ final class AuthViewController: UIViewController {
     }
 }
 
+// MARK: - WebViewViewControllerDelegate
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(
         _ vc: WebViewViewController,
