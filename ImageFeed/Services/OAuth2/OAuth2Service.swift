@@ -8,32 +8,52 @@
 import Foundation
 
 final class OAuth2Service {
+    // MARK: - Public Properties
     static let shared = OAuth2Service()
+    
+    // MARK: - Private Properties
+    private var task: URLSessionTask?
+    private var lastCode: String?
+    
+    // MARK: - Private Initials
     private init() {}
     
     func fetchOAuthToken(
         _ code: String,
         handler: @escaping (Result<String, Error>) -> Void) {
-
-        guard let request = makeOAuthTokenRequest(code: code) else {
-            DispatchQueue.main.async {
-                handler(.failure(NetworkError.invalidRequest))
-            }
-            return
-        }
-
-        let task = URLSession.shared.data(for: request) { [weak self] result in
-            guard let self else { return }
+            assert(Thread.isMainThread)
             
-            switch result {
-            case .success(let data):
-                self.handleSuccessfulResponse(data: data, completion: handler)
-            case .failure(let error):
-                self.handleFailure(error: error, completion: handler)
+            guard lastCode != code else {
+                handler(.failure(NetworkError.invalidRequest))
+                return
             }
-        }
-        
-        task.resume()
+            
+            task?.cancel()
+            lastCode = code
+            
+            guard let request = makeOAuthTokenRequest(code: code) else {
+                DispatchQueue.main.async {
+                    handler(.failure(NetworkError.invalidRequest))
+                }
+                return
+            }
+            
+            let task = URLSession.shared.data(for: request) { [weak self] result in
+                guard let self else { return }
+                
+                self.task = nil
+                self.lastCode = nil
+                
+                switch result {
+                case .success(let data):
+                    self.handleSuccessfulResponse(data: data, completion: handler)
+                case .failure(let error):
+                    self.handleFailure(error: error, completion: handler)
+                }
+            }
+            
+            self.task = task
+            task.resume()
     }
     
     // MARK: - Private functions
