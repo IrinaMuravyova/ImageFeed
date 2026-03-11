@@ -15,6 +15,18 @@ final class OAuth2Service {
     private var task: URLSessionTask?
     private var lastCode: String?
     
+    private let urlSession = URLSession.shared
+    private let dataStorage = OAuth2TokenStorage.shared
+    
+    private(set) var authToken: String? {
+        get {
+            return dataStorage.token
+        }
+        set {
+            dataStorage.token = newValue
+        }
+    }
+    
     // MARK: - Private Initials
     private init() {}
     
@@ -37,8 +49,11 @@ final class OAuth2Service {
                 }
                 return
             }
-            
-            let task = URLSession.shared.data(for: request) { [weak self] result in
+
+            let task = urlSession.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
+                
+                UIBlockingProgressHUD.dismiss()
+                
                 guard let self else { return }
                 
                 self.task = nil
@@ -46,8 +61,11 @@ final class OAuth2Service {
                 
                 switch result {
                 case .success(let data):
-                    self.handleSuccessfulResponse(data: data, completion: handler)
+                    let authToken = data.accessToken
+                    self.authToken = authToken
+                    handler(.success(authToken))
                 case .failure(let error):
+                    print("[fetchOAuthToken]: Ошибка запроса: \(error.localizedDescription)")
                     self.handleFailure(error: error, completion: handler)
                 }
             }
@@ -117,5 +135,28 @@ final class OAuth2Service {
         }
         
         completion(.failure(error))
+    }
+}
+
+// MARK: - Network Client
+extension OAuth2Service {
+    private func object(for request: URLRequest, completion: @escaping (Result<OAuthTokenResponseBody, Error>) -> Void) -> URLSessionTask {
+        let decoder = JSONDecoder()
+        return urlSession.data(for: request) { (result: Result<Data, Error>) in
+            switch result {
+            case .success(let data):
+                do {
+                    let body = try decoder.decode(OAuthTokenResponseBody.self, from: data)
+                    completion(.success(body))
+                }
+                catch {
+                    
+                    completion(.failure(NetworkError.decodingError(error)))
+                }
+                
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
     }
 }

@@ -29,12 +29,11 @@ struct UserResult: Codable {
 
 final class ProfileImageService {
     static let shared = ProfileImageService()
-    static let didChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
-        
     private init() {}
     
+    static let didChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
+        
     private(set) var avatarURL: String?
-    
     private var task: URLSessionTask?
     
     func fetchProfileImageURL(username: String, _ completion: @escaping (Result<String, Error>) -> Void) {
@@ -50,27 +49,21 @@ final class ProfileImageService {
                 return
             }
 
-            let task = URLSession.shared.data(for: request) { [weak self] result in
+        let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<UserResult, Error>) in
                 switch result {
-                case .success(let data):
+                case .success(let result):
                     guard let self else { return }
 
-                    do {
-                        let userResult = try JSONDecoder().decode(UserResult.self, from: data)
-
-                        self.avatarURL = userResult.profileImage.small
-                        completion(.success(userResult.profileImage.small))
-                        NotificationCenter.default
-                                                
-                            .post(
-                                name: ProfileImageService.didChangeNotification,
-                                object: self,
-                                userInfo: ["URL": userResult.profileImage.small]
-                            )
-                    } catch {
-                        print(error)
-                    }
-
+                    self.avatarURL = result.profileImage.small
+                    completion(.success(result.profileImage.small))
+                    
+                    NotificationCenter.default
+                        .post(
+                            name: ProfileImageService.didChangeNotification,
+                            object: self,
+                            userInfo: ["URL": self.avatarURL ?? ""]
+                        )
+                    
                 case .failure(let error):
                     print("[fetchProfileImageURL]: Ошибка запроса: \(error.localizedDescription)")
                     completion(.failure(error)) 
