@@ -15,19 +15,28 @@ final class SplashViewController: UIViewController {
     
     // MARK: - Private Properties
     private let showAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
+    
     private let storage = OAuth2TokenStorage.shared
+    private let profileService = ProfileService.shared
+    private let profileImageService = ProfileImageService.shared
     
     // MARK: - View Life Cycles
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-       
-        if storage.token != nil {
-            switchToTabBarController()
+        
+        if let token = storage.token {
+            fetchProfile(token: token)
+//            switchToTabBarController()
         } else {
             performSegue(
                 withIdentifier: showAuthenticationScreenSegueIdentifier,
                 sender: nil)
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setNeedsStatusBarAppearanceUpdate()
     }
 }
 
@@ -58,10 +67,43 @@ extension SplashViewController: AuthViewControllerDelegate {
     func didAuthenticate(_ vc: AuthViewController) {
         vc.dismiss(animated: true)
         switchToTabBarController()
+        
+        guard let token = storage.token else {
+            return
+        }
+        
+        fetchProfile(token: token)
+    }
+    
+    private func fetchProfile(token: String) {
+        UIBlockingProgressHUD.show()
+        profileService.fetchProfile(token) { [weak self] result in
+            UIBlockingProgressHUD.dismiss()
+
+            guard let self = self else { return }
+
+            switch result {
+            case let .success(profile):
+                profileImageService.fetchProfileImageURL(
+                    username: profile.username) { _ in }
+                self.switchToTabBarController()
+
+            case let .failure(error):
+                print(error)
+                break
+            }
+        }
     }
     
     private func switchToTabBarController() {
-        guard let window = UIApplication.shared.windows.first else {
+        let window = UIApplication.shared
+            .connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .flatMap { $0.windows }
+            .first { $0.isKeyWindow }
+        
+        guard let window = window
+        else {
             assertionFailure("Invalid window configuration")
             return
         }
