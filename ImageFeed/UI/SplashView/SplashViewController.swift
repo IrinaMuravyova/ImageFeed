@@ -40,6 +40,12 @@ final class SplashViewController: UIViewController {
         setNeedsStatusBarAppearanceUpdate()
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        view.backgroundColor = .darkBackground
+    }
+    
     private func setupImageView() {
         let imageSplashScreenLogo = UIImage(named: "launch_screen_logo")
 

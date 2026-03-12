@@ -19,7 +19,7 @@ final class UIBlockingProgressHUD {
     
     static func show() {
         window?.isUserInteractionEnabled = false
-        ProgressHUD.colorHUD = .black
+        ProgressHUD.colorHUD = .darkBackground
         ProgressHUD.colorBackground = .clear
         ProgressHUD.animate()
     }
