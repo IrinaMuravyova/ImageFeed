@@ -212,7 +212,6 @@
                             <constraint firstItem="N9l-rc-Brl" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="kAj-I1-YoB"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="" image="tab_editorial_active" id="d7n-KE-yfd"/>
                     <navigationItem key="navigationItem" id="vAS-uf-09g"/>
                     <connections>
                         <outlet property="tableView" destination="N9l-rc-Brl" id="yn7-tt-HHe"/>
@@ -326,7 +325,6 @@
         <image name="Logo_of_Unsplash" width="60" height="60"/>
         <image name="Sharing" width="50" height="50"/>
         <image name="nav_back_button" width="24" height="24"/>
-        <image name="tab_editorial_active" width="30" height="30"/>
         <namedColor name="DarkBackground">
             <color red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
