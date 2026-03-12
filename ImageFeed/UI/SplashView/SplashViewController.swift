@@ -20,17 +20,18 @@ final class SplashViewController: UIViewController {
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
     
+    private var imageView: UIImageView!
+    
     // MARK: - View Life Cycles
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        setupImageView()
+        
         if let token = storage.token {
             fetchProfile(token: token)
-//            switchToTabBarController()
         } else {
-            performSegue(
-                withIdentifier: showAuthenticationScreenSegueIdentifier,
-                sender: nil)
+            presentAuthViewController()
         }
     }
     
@@ -38,27 +39,33 @@ final class SplashViewController: UIViewController {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
     }
+    
+    private func setupImageView() {
+        let imageSplashScreenLogo = UIImage(named: "launch_screen_logo")
+
+        imageView = UIImageView(image: imageSplashScreenLogo)
+
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(imageView)
+
+        NSLayoutConstraint.activate([
+            imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+    }
 }
 
 // MARK: - Auth Navigation
 extension SplashViewController {
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == showAuthenticationScreenSegueIdentifier {
-            guard
-                let navigationController = segue.destination as? UINavigationController,
-                let viewController = navigationController.viewControllers.first as? AuthViewController
-            else {
-                assertionFailure("Failed to prepare for \(showAuthenticationScreenSegueIdentifier)")
-                return
-            }
-            
-            navigationController.modalPresentationStyle = .fullScreen
-            navigationController.isModalInPresentation = true
-            
-            viewController.delegate = self
-        } else {
-            super.prepare(for: segue, sender: sender)
+    private func presentAuthViewController() {
+        let storyboard = UIStoryboard(name: "Main", bundle: .main)
+        guard let authViewController = storyboard.instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else {
+            assertionFailure("Не удалось найти AuthViewController по идентификатору")
+            return
         }
+        authViewController.delegate = self
+        authViewController.modalPresentationStyle = .fullScreen
+        present(authViewController, animated: true)
     }
 }
 
@@ -113,40 +120,8 @@ extension SplashViewController: AuthViewControllerDelegate {
             assertionFailure("Failed to instantiate TabBarViewController")
             return
         }
-            
-        setupTabBarAppearance(tabBarController.tabBar)
-        window.rootViewController = tabBarController
-    }
-    
-    private func setupTabBarAppearance(_ tabBar: UITabBar) {
-        if #available(iOS 15.0, *) {
-            let appearance = UITabBarAppearance()
-            appearance.configureWithOpaqueBackground()
-            appearance.backgroundColor = .darkBackground
-            
-            tabBar.standardAppearance = appearance
-            tabBar.scrollEdgeAppearance = appearance
-            
-        } else {
-            tabBar.barTintColor = .darkBackground
-            tabBar.isTranslucent = false
-        }
-    }
-
-    private func fixTabBarAppearance(_ tabBar: UITabBar) {
-        tabBar.setNeedsLayout()
-        tabBar.layoutIfNeeded()
         
-        if #available(iOS 15.0, *) {
-            DispatchQueue.main.async {
-                let appearance = UITabBarAppearance()
-                appearance.configureWithOpaqueBackground()
-                appearance.backgroundColor = .darkBackground
-                
-                tabBar.standardAppearance = appearance
-                tabBar.scrollEdgeAppearance = appearance
-            }
-        }
+        window.rootViewController = tabBarController
     }
 }
 
