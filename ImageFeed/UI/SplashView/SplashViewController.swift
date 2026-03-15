@@ -20,7 +20,7 @@ final class SplashViewController: UIViewController {
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
     
-    private var imageView: UIImageView!
+    private var imageView: UIImageView?
     
     // MARK: - View Life Cycles
     override func viewDidAppear(_ animated: Bool) {
@@ -48,9 +48,11 @@ final class SplashViewController: UIViewController {
     
     private func setupImageView() {
         let imageSplashScreenLogo = UIImage(named: "launch_screen_logo")
-
+        
         imageView = UIImageView(image: imageSplashScreenLogo)
 
+        guard let imageView else { return }
+        
         imageView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(imageView)
 

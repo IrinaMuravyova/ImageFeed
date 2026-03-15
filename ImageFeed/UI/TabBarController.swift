@@ -15,17 +15,18 @@ final class TabBarController: UITabBarController {
         let imagesListViewController = storyboard.instantiateViewController(
             withIdentifier: "ImagesListViewController"
         )
+
         imagesListViewController.tabBarItem = UITabBarItem(
             title: "",
-            image: UIImage(named: "tab_editorial_no_active"),
-            selectedImage: UIImage(named: "tab_editorial_active")
+            image: UIImage(resource: .tabEditorialNoActive),
+            selectedImage: UIImage(resource: .tabEditorialActive)
         )
         
         let profileViewController = ProfileViewController()
         profileViewController.tabBarItem = UITabBarItem(
             title: "",
-            image: UIImage(named: "tab_profile_no_active"),
-            selectedImage: UIImage(named: "tab_profile_active")
+            image: UIImage(resource: .tabProfileNoActive),
+            selectedImage: UIImage(resource: .tabProfileActive)
         )
         
         self.viewControllers = [imagesListViewController, profileViewController]

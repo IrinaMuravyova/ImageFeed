@@ -20,7 +20,7 @@ final class OAuth2Service {
     
     private(set) var authToken: String? {
         get {
-            return dataStorage.token
+            dataStorage.token
         }
         set {
             dataStorage.token = newValue
