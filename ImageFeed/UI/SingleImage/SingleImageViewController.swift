@@ -5,6 +5,7 @@
 //  Created by Irina Muravyeva on 04.01.2026.
 //
 import UIKit
+import Kingfisher
 
 final class SingleImageViewController: UIViewController {
     // MARK: - Constants
@@ -19,11 +20,18 @@ final class SingleImageViewController: UIViewController {
     @IBOutlet private weak var imageView: UIImageView!
     @IBOutlet private weak var scrollView: UIScrollView!
     
+    // MARK: - Properties
+    private var imageURL: URL?
+    
     // MARK: - LifeCircle
     override func viewDidLoad() {
         super.viewDidLoad()
         updateImage()
         setupScrollView()
+        
+        if let url = imageURL {
+         setImage(from: url)
+        }
     }
     
     // MARK: - IBActions
@@ -51,6 +59,17 @@ final class SingleImageViewController: UIViewController {
         updateContentInset()
     }
     
+    func setImage(from url: URL) {
+        imageURL = url
+        
+//        imageView.kf.indicatorType = .activity
+//        imageView.kf.setImage(
+//            with: url,
+//            placeholder: UIImage(named: "Stub"),
+//            options: [.transition(.fade(0.3))]
+//        )
+    }
+
     // MARK: - Private functions
     private func setupScrollView() {
         scrollView.minimumZoomScale = 0.1
