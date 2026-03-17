@@ -8,32 +8,70 @@
 import Foundation
 
 final class OAuth2Service {
+    // MARK: - Public Properties
     static let shared = OAuth2Service()
+    
+    // MARK: - Private Properties
+    private var task: URLSessionTask?
+    private var lastCode: String?
+    
+    private let urlSession = URLSession.shared
+    private let dataStorage = OAuth2TokenStorage.shared
+    
+    private(set) var authToken: String? {
+        get {
+            dataStorage.token
+        }
+        set {
+            dataStorage.token = newValue
+        }
+    }
+    
+    // MARK: - Private Initials
     private init() {}
     
     func fetchOAuthToken(
         _ code: String,
         handler: @escaping (Result<String, Error>) -> Void) {
-
-        guard let request = makeOAuthTokenRequest(code: code) else {
-            DispatchQueue.main.async {
-                handler(.failure(NetworkError.invalidRequest))
-            }
-            return
-        }
-
-        let task = URLSession.shared.data(for: request) { [weak self] result in
-            guard let self else { return }
+            assert(Thread.isMainThread)
             
-            switch result {
-            case .success(let data):
-                self.handleSuccessfulResponse(data: data, completion: handler)
-            case .failure(let error):
-                self.handleFailure(error: error, completion: handler)
+            guard lastCode != code else {
+                handler(.failure(NetworkError.invalidRequest))
+                return
             }
-        }
-        
-        task.resume()
+            
+            task?.cancel()
+            lastCode = code
+            
+            guard let request = makeOAuthTokenRequest(code: code) else {
+                DispatchQueue.main.async {
+                    handler(.failure(NetworkError.invalidRequest))
+                }
+                return
+            }
+
+            let task = urlSession.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
+                
+                UIBlockingProgressHUD.dismiss()
+                
+                guard let self else { return }
+                
+                self.task = nil
+                self.lastCode = nil
+                
+                switch result {
+                case .success(let data):
+                    let authToken = data.accessToken
+                    self.authToken = authToken
+                    handler(.success(authToken))
+                case .failure(let error):
+                    print("[fetchOAuthToken]: Ошибка запроса: \(error.localizedDescription)")
+                    self.handleFailure(error: error, completion: handler)
+                }
+            }
+            
+            self.task = task
+            task.resume()
     }
     
     // MARK: - Private functions
@@ -97,5 +135,28 @@ final class OAuth2Service {
         }
         
         completion(.failure(error))
+    }
+}
+
+// MARK: - Network Client
+extension OAuth2Service {
+    private func object(for request: URLRequest, completion: @escaping (Result<OAuthTokenResponseBody, Error>) -> Void) -> URLSessionTask {
+        let decoder = JSONDecoder()
+        return urlSession.data(for: request) { (result: Result<Data, Error>) in
+            switch result {
+            case .success(let data):
+                do {
+                    let body = try decoder.decode(OAuthTokenResponseBody.self, from: data)
+                    completion(.success(body))
+                }
+                catch {
+                    
+                    completion(.failure(NetworkError.decodingError(error)))
+                }
+                
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
     }
 }
