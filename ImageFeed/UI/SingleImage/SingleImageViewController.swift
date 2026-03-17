@@ -26,6 +26,7 @@ final class SingleImageViewController: UIViewController {
     // MARK: - LifeCircle
     override func viewDidLoad() {
         super.viewDidLoad()
+        scrollView.contentInsetAdjustmentBehavior = .never
         updateImage()
         setupScrollView()
         
@@ -85,7 +86,7 @@ final class SingleImageViewController: UIViewController {
     // MARK: - Private functions
     private func setupScrollView() {
         scrollView.minimumZoomScale = 0.1
-        scrollView.maximumZoomScale = 1.25
+        scrollView.maximumZoomScale = 2
         scrollView.delegate = self
     }
     
@@ -94,6 +95,7 @@ final class SingleImageViewController: UIViewController {
 
         imageView.image = image
         imageView.frame.size = image.size
+
         rescaleAndCenterImageInScrollView(image)
     }
     
@@ -109,6 +111,7 @@ final class SingleImageViewController: UIViewController {
     
     // MARK: - Zoom handling
     private func rescaleAndCenterImageInScrollView(_ image: UIImage) {
+        
         let minZoomScale = scrollView.minimumZoomScale
         let maxZoomScale = scrollView.maximumZoomScale
         view.layoutIfNeeded()
@@ -122,14 +125,17 @@ final class SingleImageViewController: UIViewController {
    
         let theoreticalScale = max(widthScale, heightScale)
         let scale = min(maxZoomScale, max(minZoomScale, theoreticalScale))
-        
+       
         scrollView.setZoomScale(scale, animated: false)
         scrollView.layoutIfNeeded()
         
         let newContentSize = scrollView.contentSize
         let x = (newContentSize.width - visibleRectSize.width) / 2
         let y = (newContentSize.height - visibleRectSize.height) / 2
-        scrollView.setContentOffset(CGPoint(x: x, y: y), animated: false)
+    
+        scrollView.contentInsetAdjustmentBehavior = .never
+        scrollView.setContentOffset(CGPoint(x: x, y: y + 20),
+                                    animated: false)
         
         updateContentInset()
     }
