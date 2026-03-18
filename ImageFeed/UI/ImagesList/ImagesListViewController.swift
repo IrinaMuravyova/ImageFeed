@@ -23,8 +23,8 @@ final class ImagesListViewController: UIViewController {
         return formatter
     }()
     
-    private let imagesListService = ImagesListService()
-    
+    private let imagesListService = ImagesListService.shared
+
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()

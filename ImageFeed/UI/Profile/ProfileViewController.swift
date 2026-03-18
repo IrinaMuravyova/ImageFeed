@@ -169,6 +169,7 @@ extension ProfileViewController {
     
     // MARK: - Actions
     @objc private func logoutButtonTapped() {
+        ProfileLogoutService.shared.logout()
         self.dismiss(animated: true , completion: nil)
     }
 }

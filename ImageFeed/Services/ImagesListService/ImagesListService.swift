@@ -53,6 +53,9 @@ struct PhotoResult: Decodable {
 }
 
 final class ImagesListService {
+    static let shared = ImagesListService()
+    private init() {}
+    
     static let didChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
     
     private(set) var photos: [Photo] = []
@@ -127,7 +130,7 @@ final class ImagesListService {
                 print("Decoding error: ", error)
             }
         }
-            task.resume()
+        task.resume()
     }
     
     func changeLike(
@@ -139,7 +142,7 @@ final class ImagesListService {
             completion(.failure(UnsplashError.invalidToken))
             return
         }
-
+        
         guard let url = URL(string: "https://api.unsplash.com/photos/\(photoId)/like") else {
             completion(.failure(UnsplashError.invalidURL))
             return
@@ -196,5 +199,9 @@ final class ImagesListService {
             name: ImagesListService.didChangeNotification,
             object: nil
         )
+    }
+    
+    func reset() {
+        photos.removeAll()
     }
 }

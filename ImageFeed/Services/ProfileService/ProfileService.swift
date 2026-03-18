@@ -42,7 +42,7 @@ final class ProfileService {
             completion(.failure(URLError(.badURL)))
             return
         }
-
+        
         let task = urlSession.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in
             switch result {
             case .success(let result):
@@ -61,7 +61,7 @@ final class ProfileService {
             }
             self?.task = nil
         }
-
+        
         self.task = task
         task.resume()
     }
@@ -70,10 +70,14 @@ final class ProfileService {
         guard let url = URL(string: "https://api.unsplash.com/me") else {
             return nil
         }
-
+        
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
+    }
+    
+    func reset() {
+        profile = nil
     }
 }
