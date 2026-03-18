@@ -183,6 +183,8 @@ extension ImagesListViewController: ImagesListCellDelegate {
 
     func imagesListCellDidTapLike(_ cell: ImagesListCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
+        
+        cell.likeButton.isEnabled = false
         let photo = photos[indexPath.row]
         
         UIBlockingProgressHUD.show()
@@ -193,6 +195,7 @@ extension ImagesListViewController: ImagesListCellDelegate {
             case .success:
                 self.photos = self.imagesListService.photos
                 cell.setIsLiked(self.photos[indexPath.row].isLiked)
+                cell.likeButton.isEnabled = true
                 UIBlockingProgressHUD.dismiss()
             case .failure(let error):
                 UIBlockingProgressHUD.dismiss()

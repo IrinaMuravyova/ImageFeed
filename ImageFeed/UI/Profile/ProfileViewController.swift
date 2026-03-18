@@ -86,7 +86,7 @@ final class ProfileViewController: UIViewController {
     
     private func updateProfileDetails(with profile: Profile) {
         nameLabel.text = profile.name.isEmpty
-            ? "Имя не указано"
+            ? " "
             : profile.name
         nickLabel.text = profile.loginName.isEmpty
             ? "@неизвестный_пользователь"
@@ -169,7 +169,18 @@ extension ProfileViewController {
     
     // MARK: - Actions
     @objc private func logoutButtonTapped() {
-        ProfileLogoutService.shared.logout()
-        self.dismiss(animated: true , completion: nil)
+        let alert = UIAlertController(
+            title: "Выход из аккаунта",
+            message: "Вы уверены, что хотите выйти?",
+            preferredStyle: .alert
+        )
+        
+        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
+        alert.addAction(UIAlertAction(title: "Выйти", style: .destructive) { _ in
+            ProfileLogoutService.shared.logout()
+            self.dismiss(animated: true, completion: nil)
+        })
+        
+        present(alert, animated: true)
     }
 }

@@ -80,7 +80,10 @@ final class ImagesListService {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         
-        guard let token = OAuth2TokenStorage.shared.token else { return }
+        guard let token = OAuth2TokenStorage.shared.token else {
+            isLoading = false
+            return
+        }
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         request.setValue("v1", forHTTPHeaderField: "Accept-Version")
         
@@ -92,13 +95,11 @@ final class ImagesListService {
             defer { self.isLoading = false }
             
             if let error = error {
-                print("Network error:", error)
+                print("[ImagesListService fetchPhotosNextPage]: Network error: \(error.localizedDescription)")
                 return
             }
             
             guard let data = data else { return }
-            
-            let urlString = "https://api.unsplash.com/photos?page=\(nextPage)&per_page=10"
             
             do {
                 let photoResults = try JSONDecoder().decode([PhotoResult].self, from: data)
@@ -116,18 +117,15 @@ final class ImagesListService {
                         isLiked: result.likedByUser
                     )
                 }
-                
+        
                 DispatchQueue.main.async {
-                    
-                    let oldCount = self.photos.count
                     self.photos.append(contentsOf: newPhotos)
                     self.lastLoadedPage = nextPage
-                    self.isLoading = false
                     
                     NotificationCenter.default.post(name: ImagesListService.didChangeNotification, object: nil)
                 }
             } catch {
-                print("Decoding error: ", error)
+                print("[ImagesListService.fetchPhotosNextPage]: Decoding error \(error) for data: \(String(data: data, encoding: .utf8) ?? "nil")")
             }
         }
         task.resume()

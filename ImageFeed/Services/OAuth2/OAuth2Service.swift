@@ -120,18 +120,18 @@ final class OAuth2Service {
         if let networkError = error as? NetworkError {
             switch networkError {
             case .httpStatusCode(let statusCode):
-                print("[OAuth2Service] Ошибка сервера: HTTP статус \(statusCode)")
+                print("[OAuth2Service] Server error: HTTP status \(statusCode)")
             case .urlRequestError(let urlError):
-                print("[OAuth2Service] Сетевая ошибка запроса: \(urlError.localizedDescription)")
+                print("[OAuth2Service] Network request error: \(urlError.localizedDescription)")
             case .urlSessionError:
-                print("[OAuth2Service] Ошибка URLSession")
+                print("[OAuth2Service] URLSession error")
             case .decodingError(let decodingError):
-                print("[OAuth2Service] Ошибка декодирования: \(decodingError.localizedDescription)")
+                print("[OAuth2Service] Decoding error: \(decodingError.localizedDescription)")
             default:
-                print("[OAuth2Service] Неизвестная сетевая ошибка: \(error.localizedDescription)")
+                print("[OAuth2Service] Unknown network error: \(error.localizedDescription)")
             }
         } else {
-            print("[OAuth2Service] Общая ошибка: \(error.localizedDescription)")
+            print("[OAuth2Service] Common error: \(error.localizedDescription)")
         }
         
         completion(.failure(error))

@@ -56,7 +56,7 @@ final class ProfileService {
                 self?.profile = profile
                 completion(.success(profile))
             case .failure(let error):
-                print("[fetchProfile]: Ошибка запроса: \(error.localizedDescription)")
+                print("[fetchProfile]: Request error: \(error.localizedDescription)")
                 completion(.failure(error))
             }
             self?.task = nil

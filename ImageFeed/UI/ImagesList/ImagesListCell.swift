@@ -36,6 +36,8 @@ final class ImagesListCell: UITableViewCell {
         
         likeButton.isHidden = true
         photoDate.isHidden = true
+        
+        feedImageView.image = nil
     }
     
     @IBAction func likeButtonClicked(_ sender: UIButton) {
