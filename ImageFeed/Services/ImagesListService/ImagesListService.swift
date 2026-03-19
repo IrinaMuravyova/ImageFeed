@@ -90,7 +90,7 @@ final class ImagesListService {
         let task = URLSession.shared.dataTask(
             with: request
         ) { [weak self] data, response, error in
-            guard let self = self else { return }
+            guard let self else { return }
             
             defer { self.isLoading = false }
             
@@ -117,7 +117,7 @@ final class ImagesListService {
                         isLiked: result.likedByUser
                     )
                 }
-        
+                
                 DispatchQueue.main.async {
                     self.photos.append(contentsOf: newPhotos)
                     self.lastLoadedPage = nextPage
@@ -169,8 +169,8 @@ final class ImagesListService {
                 return
             }
             
-            DispatchQueue.main.async {
-                self.updatePhotoLike(photoId: photoId, isLiked: isLike)
+            DispatchQueue.main.async { [weak self] in
+                self?.updatePhotoLike(photoId: photoId, isLiked: isLike)
                 completion(.success(()))
             }
         }

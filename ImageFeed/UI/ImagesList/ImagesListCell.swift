@@ -44,7 +44,6 @@ final class ImagesListCell: UITableViewCell {
         delegate?.imagesListCellDidTapLike(self)
     }
     
-    
     func setIsLiked(_ isLiked: Bool) {
         let likeImage = isLiked
             ? UIImage(resource: .active)

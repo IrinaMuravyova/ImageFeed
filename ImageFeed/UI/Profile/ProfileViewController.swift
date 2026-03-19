@@ -176,9 +176,9 @@ extension ProfileViewController {
         )
         
         alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Выйти", style: .destructive) { _ in
+        alert.addAction(UIAlertAction(title: "Выйти", style: .destructive) { [weak self] _ in
             ProfileLogoutService.shared.logout()
-            self.dismiss(animated: true, completion: nil)
+            self?.dismiss(animated: true, completion: nil)
         })
         
         present(alert, animated: true)
