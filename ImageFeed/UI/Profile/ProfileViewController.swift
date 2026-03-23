@@ -82,66 +82,7 @@ final class ProfileViewController: UIViewController {
         setupView()
         setupConstraints()
         presenter.viewDidLoad()
-//        if let profile = profileService.profile {
-//            updateProfileDetails(with: profile)
-//        }
-//        
-//        profileImageServiceObserver = NotificationCenter.default
-//            .addObserver(
-//                forName: ProfileImageService.didChangeNotification,
-//                object: self,
-//                queue: .main
-//            ) { [weak self] _ in
-//                guard let self else { return }
-//                self.updateAvatar()
-//            }
-//
-//        updateAvatar()
     }
-    
-//    internal func updateProfileDetails(with profile: Profile) {
-//        nameLabel.text = profile.name.isEmpty
-//            ? " "
-//            : profile.name
-//        nickLabel.text = profile.loginName.isEmpty
-//            ? "@неизвестный_пользователь"
-//            : profile.loginName
-//        descriptionLabel.text = (profile.bio?.isEmpty ?? true)
-//            ? "Профиль не заполнен"
-//            : profile.bio
-//    }
-    
-//    private func updateAvatar() {
-//        guard
-//            let profileImageURL = profileImageService.avatarURL,
-//            let url = URL(string: profileImageURL)
-//        else { return }
-//        
-//        let placeholderImage = UIImage(systemName: "person.circle.fill")?
-//            .withTintColor(.lightGray, renderingMode: .alwaysOriginal)
-//            .withConfiguration(UIImage.SymbolConfiguration(pointSize: 70, weight: .regular, scale: .large))
-//        
-//        let processor = RoundCornerImageProcessor(cornerRadius: 35)
-//        profilePhotoImageView.kf.indicatorType = .activity
-//        profilePhotoImageView.kf.setImage(
-//            with: url,
-//            placeholder: placeholderImage,
-//            options: [
-//                .processor(processor),
-//                .scaleFactor(UIScreen.main.scale),
-//                .cacheOriginalImage,
-//                .forceRefresh
-//            ]) { result in
-//                switch result {
-//                case .success(let value):
-//                    print(value.image)
-//                    print(value.cacheType)
-//                    print(value.source)
-//                case .failure(let error):
-//                    print(error)
-//                }
-//            }
-//    }
 }
 
 // MARK: - Private functions
@@ -185,20 +126,6 @@ extension ProfileViewController {
     // MARK: - Actions
     @objc func logoutButtonTapped() {
         presenter.logoutButtonTapped()
-//        showLogoutAlert()
-//        let alert = UIAlertController(
-//            title: "Выход из аккаунта",
-//            message: "Вы уверены, что хотите выйти?",
-//            preferredStyle: .alert
-//        )
-//        
-//        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
-//        alert.addAction(UIAlertAction(title: "Выйти", style: .destructive) { [weak self] _ in
-//            ProfileLogoutService.shared.logout()
-//            self?.dismiss(animated: true, completion: nil)
-//        })
-//        
-//        present(alert, animated: true)
     }
 }
 
@@ -239,16 +166,6 @@ extension ProfileViewController: ProfileViewControllerProtocol {
                 .forceRefresh
             ]
         )
-//        { result in
-//                switch result {
-//                case .success(let value):
-//                    print(value.image)
-//                    print(value.cacheType)
-//                    print(value.source)
-//                case .failure(let error):
-//                    print(error)
-//                }
-//            }
     }
     
     func showLogoutAlert() {
@@ -271,6 +188,4 @@ extension ProfileViewController: ProfileViewControllerProtocol {
     func dismissView() {
         dismiss(animated: true, completion: nil)
     }
-    
-    
 }
