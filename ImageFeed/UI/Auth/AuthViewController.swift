@@ -41,10 +41,14 @@ final class AuthViewController: UIViewController {
                 return
             }
             
+            let authHelper = AuthHelper()
+            let webViewPresenter = WebViewPresenter(authHelper: authHelper)
+
+            webViewViewController.presenter = webViewPresenter
+            webViewPresenter.view = webViewViewController
+            webViewViewController.delegate = self
             webViewViewController.modalPresentationStyle = .fullScreen
             webViewViewController.isModalInPresentation = true
-            
-            webViewViewController.delegate = self
         } else {
             super.prepare(for: segue, sender: sender)
         }

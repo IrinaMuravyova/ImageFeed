@@ -23,7 +23,7 @@ struct UserResult: Codable {
     }
 }
 
-final class ProfileImageService {
+class ProfileImageService {
     static let shared = ProfileImageService()
     private init() {}
     
@@ -32,6 +32,7 @@ final class ProfileImageService {
     private(set) var avatarURL: String?
     private var task: URLSessionTask?
     
+    // MARK: - Functions
     func fetchProfileImageURL(username: String, _ completion: @escaping (Result<String, Error>) -> Void) {
         task?.cancel()
         

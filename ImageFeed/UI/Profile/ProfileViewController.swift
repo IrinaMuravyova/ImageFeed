@@ -8,17 +8,24 @@
 import UIKit
 import Kingfisher
 
+public protocol ProfileViewControllerProtocol: AnyObject {
+    func updateProfileDetails(with profile: Profile)
+    func updateAvatar(with url: URL?)
+    func showLogoutAlert()
+    func dismissView()
+}
+
 // MARK: - ProfileViewController
 final class ProfileViewController: UIViewController {
     // MARK: - UI
-    private lazy var profilePhotoImageView: UIImageView = {
+    private(set) lazy var profilePhotoImageView: UIImageView = {
         let image = UIImage(named: "profile_photo")
         let imageView = UIImageView(image: image)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
-    private lazy var nameLabel: UILabel = {
+    private(set) lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.text = "Екатерина Новикова"
         label.textColor = .white
@@ -27,7 +34,7 @@ final class ProfileViewController: UIViewController {
         return label
     }()
     
-    private lazy var nickLabel: UILabel = {
+    private(set) lazy var nickLabel: UILabel = {
         let label = UILabel()
         label.text = "@ekaterina_nov"
         label.textColor = .nickName
@@ -36,7 +43,7 @@ final class ProfileViewController: UIViewController {
         return label
     }()
     
-    private lazy var descriptionLabel: UILabel = {
+    private(set) lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.text = "Hello, world!"
         label.textColor = .white
@@ -45,7 +52,7 @@ final class ProfileViewController: UIViewController {
         return label
     }()
     
-    private lazy var logoutButton: UIButton = {
+    private(set) lazy var logoutButton: UIButton = {
         let button = UIButton.systemButton(
             with: UIImage(named: "Exit") ?? UIImage(),
             target: self,
@@ -60,73 +67,81 @@ final class ProfileViewController: UIViewController {
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
-
+    
+    // MARK: - For better testing
+    private(set) var presenter: ProfilePresenterProtocol!
+    
+    func configure(_ presenter: ProfilePresenterProtocol) {
+        self.presenter = presenter
+        presenter.view = self
+    }
+    
     // MARK: - LifeCircle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupConstraints()
-        
-        if let profile = profileService.profile {
-            updateProfileDetails(with: profile)
-        }
-        
-        profileImageServiceObserver = NotificationCenter.default
-            .addObserver(
-                forName: ProfileImageService.didChangeNotification,
-                object: self,
-                queue: .main
-            ) { [weak self] _ in
-                guard let self else { return }
-                self.updateAvatar()
-            }
-
-        updateAvatar()
+        presenter.viewDidLoad()
+//        if let profile = profileService.profile {
+//            updateProfileDetails(with: profile)
+//        }
+//        
+//        profileImageServiceObserver = NotificationCenter.default
+//            .addObserver(
+//                forName: ProfileImageService.didChangeNotification,
+//                object: self,
+//                queue: .main
+//            ) { [weak self] _ in
+//                guard let self else { return }
+//                self.updateAvatar()
+//            }
+//
+//        updateAvatar()
     }
     
-    private func updateProfileDetails(with profile: Profile) {
-        nameLabel.text = profile.name.isEmpty
-            ? " "
-            : profile.name
-        nickLabel.text = profile.loginName.isEmpty
-            ? "@неизвестный_пользователь"
-            : profile.loginName
-        descriptionLabel.text = (profile.bio?.isEmpty ?? true)
-            ? "Профиль не заполнен"
-            : profile.bio
-    }
+//    internal func updateProfileDetails(with profile: Profile) {
+//        nameLabel.text = profile.name.isEmpty
+//            ? " "
+//            : profile.name
+//        nickLabel.text = profile.loginName.isEmpty
+//            ? "@неизвестный_пользователь"
+//            : profile.loginName
+//        descriptionLabel.text = (profile.bio?.isEmpty ?? true)
+//            ? "Профиль не заполнен"
+//            : profile.bio
+//    }
     
-    private func updateAvatar() {
-        guard
-            let profileImageURL = profileImageService.avatarURL,
-            let url = URL(string: profileImageURL)
-        else { return }
-        
-        let placeholderImage = UIImage(systemName: "person.circle.fill")?
-            .withTintColor(.lightGray, renderingMode: .alwaysOriginal)
-            .withConfiguration(UIImage.SymbolConfiguration(pointSize: 70, weight: .regular, scale: .large))
-        
-        let processor = RoundCornerImageProcessor(cornerRadius: 35)
-        profilePhotoImageView.kf.indicatorType = .activity
-        profilePhotoImageView.kf.setImage(
-            with: url,
-            placeholder: placeholderImage,
-            options: [
-                .processor(processor),
-                .scaleFactor(UIScreen.main.scale),
-                .cacheOriginalImage,
-                .forceRefresh
-            ]) { result in
-                switch result {
-                case .success(let value):
-                    print(value.image)
-                    print(value.cacheType)
-                    print(value.source)
-                case .failure(let error):
-                    print(error)
-                }
-            }
-    }
+//    private func updateAvatar() {
+//        guard
+//            let profileImageURL = profileImageService.avatarURL,
+//            let url = URL(string: profileImageURL)
+//        else { return }
+//        
+//        let placeholderImage = UIImage(systemName: "person.circle.fill")?
+//            .withTintColor(.lightGray, renderingMode: .alwaysOriginal)
+//            .withConfiguration(UIImage.SymbolConfiguration(pointSize: 70, weight: .regular, scale: .large))
+//        
+//        let processor = RoundCornerImageProcessor(cornerRadius: 35)
+//        profilePhotoImageView.kf.indicatorType = .activity
+//        profilePhotoImageView.kf.setImage(
+//            with: url,
+//            placeholder: placeholderImage,
+//            options: [
+//                .processor(processor),
+//                .scaleFactor(UIScreen.main.scale),
+//                .cacheOriginalImage,
+//                .forceRefresh
+//            ]) { result in
+//                switch result {
+//                case .success(let value):
+//                    print(value.image)
+//                    print(value.cacheType)
+//                    print(value.source)
+//                case .failure(let error):
+//                    print(error)
+//                }
+//            }
+//    }
 }
 
 // MARK: - Private functions
@@ -168,7 +183,75 @@ extension ProfileViewController {
     }
     
     // MARK: - Actions
-    @objc private func logoutButtonTapped() {
+    @objc func logoutButtonTapped() {
+        presenter.logoutButtonTapped()
+//        showLogoutAlert()
+//        let alert = UIAlertController(
+//            title: "Выход из аккаунта",
+//            message: "Вы уверены, что хотите выйти?",
+//            preferredStyle: .alert
+//        )
+//        
+//        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
+//        alert.addAction(UIAlertAction(title: "Выйти", style: .destructive) { [weak self] _ in
+//            ProfileLogoutService.shared.logout()
+//            self?.dismiss(animated: true, completion: nil)
+//        })
+//        
+//        present(alert, animated: true)
+    }
+}
+
+// MARK: - ProfileViewControllerProtocol
+extension ProfileViewController: ProfileViewControllerProtocol {
+    func updateProfileDetails(with profile: Profile) {
+        nameLabel.text = profile.name.isEmpty
+            ? " "
+            : profile.name
+        nickLabel.text = profile.loginName.isEmpty
+            ? "@неизвестный_пользователь"
+            : profile.loginName
+        descriptionLabel.text = (profile.bio?.isEmpty ?? true)
+            ? "Профиль не заполнен"
+            : profile.bio
+    }
+    
+    func updateAvatar(with url: URL?) {
+        guard
+            let profileImageURL = profileImageService.avatarURL,
+            let url = URL(string: profileImageURL)
+        else { return }
+        
+        let placeholderImage = UIImage(systemName: "person.circle.fill")?
+            .withTintColor(.lightGray, renderingMode: .alwaysOriginal)
+            .withConfiguration(UIImage.SymbolConfiguration(pointSize: 70, weight: .regular, scale: .large))
+        
+        let processor = RoundCornerImageProcessor(cornerRadius: 35)
+        
+        profilePhotoImageView.kf.indicatorType = .activity
+        profilePhotoImageView.kf.setImage(
+            with: url,
+            placeholder: placeholderImage,
+            options: [
+                .processor(processor),
+                .scaleFactor(UIScreen.main.scale),
+                .cacheOriginalImage,
+                .forceRefresh
+            ]
+        )
+//        { result in
+//                switch result {
+//                case .success(let value):
+//                    print(value.image)
+//                    print(value.cacheType)
+//                    print(value.source)
+//                case .failure(let error):
+//                    print(error)
+//                }
+//            }
+    }
+    
+    func showLogoutAlert() {
         let alert = UIAlertController(
             title: "Выход из аккаунта",
             message: "Вы уверены, что хотите выйти?",
@@ -176,11 +259,18 @@ extension ProfileViewController {
         )
         
         alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Выйти", style: .destructive) { [weak self] _ in
-            ProfileLogoutService.shared.logout()
-            self?.dismiss(animated: true, completion: nil)
-        })
+        alert.addAction(
+            UIAlertAction(title: "Выйти", style: .destructive) { [weak self] _ in
+                self?.presenter.logoutButtonTapped()
+            }
+        )
         
         present(alert, animated: true)
     }
+    
+    func dismissView() {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    
 }
