@@ -41,7 +41,7 @@ final class AuthViewController: UIViewController {
                 return
             }
             
-            let authHelper = AuthHelper()
+            let authHelper = AuthHelper(configuration: .standard)
             let webViewPresenter = WebViewPresenter(authHelper: authHelper)
 
             webViewViewController.presenter = webViewPresenter
@@ -73,6 +73,8 @@ final class AuthViewController: UIViewController {
             attributes: attributes
         )
         loginButton.setAttributedTitle(attributedTitle, for: .normal)
+        
+        loginButton.accessibilityIdentifier = "Authenticate"
     }
 }
 

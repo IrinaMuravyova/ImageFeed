@@ -52,7 +52,22 @@ struct PhotoResult: Decodable {
     }
 }
 
-final class ImagesListService {
+// MARK: - ImagesListServiceProtocol
+protocol ImagesListServiceProtocol: AnyObject {
+    var photos: [Photo] { get }
+    
+    func fetchPhotosNextPage()
+    func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void)
+}
+
+// MARK: - Notification Names
+extension ImagesListServiceProtocol {
+    static var didChangeNotification: Notification.Name {
+        return Notification.Name(rawValue: "ImagesListServiceDidChange")
+    }
+}
+
+class ImagesListService: ImagesListServiceProtocol {
     static let shared = ImagesListService()
     private init() {}
     

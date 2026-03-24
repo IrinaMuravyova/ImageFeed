@@ -20,5 +20,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         return sceneConfiguration
     }
+    
+    // MARK: - For debugging
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+            
+            #if DEBUG
+            if CommandLine.arguments.contains("-clearAuth") {
+                OAuth2TokenStorage.shared.removeToken()
+                print("🗑️ Токен очищен для UI-тестов")
+            }
+            #endif
+            
+            return true
+        }
 }
 

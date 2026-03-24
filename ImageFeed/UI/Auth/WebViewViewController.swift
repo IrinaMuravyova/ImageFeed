@@ -38,28 +38,8 @@ final class WebViewViewController: UIViewController, WebViewViewControllerProtoc
     // MARK: - View Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let configuration = WKWebViewConfiguration()
-        configuration.websiteDataStore = .default()
-        
-        webView = WKWebView(frame: .zero, configuration: configuration)
-        
-        guard let webView else {
-            assertionFailure("Failed to instantiate WKWebView")
-            return
-        }
-        webView.translatesAutoresizingMaskIntoConstraints = false
-
-        view.insertSubview(webView, belowSubview: progressView)
-
-        NSLayoutConstraint.activate([
-        webView.topAnchor.constraint(equalTo: view.topAnchor),
-        webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-        webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-        webView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
-        
-        webView.navigationDelegate = self
+        configureWebView()
+        presenter?.viewDidLoad()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -82,6 +62,33 @@ final class WebViewViewController: UIViewController, WebViewViewControllerProtoc
     // MARK: - IB Actions
     @IBAction private func didTapBackButton(_ sender: Any?) {
         delegate?.webViewViewControllerDidCancel(self)
+    }
+    
+    private func configureWebView() {
+        let configuration = WKWebViewConfiguration()
+        configuration.websiteDataStore = .default()
+        
+        webView = WKWebView(frame: .zero, configuration: configuration)
+        
+        guard let webView else {
+            assertionFailure("Failed to instantiate WKWebView")
+            return
+        }
+            
+        webView.translatesAutoresizingMaskIntoConstraints = false
+        webView.navigationDelegate = self
+        webView.accessibilityIdentifier = "UnsplashWebView"
+        
+        view.addSubview(webView)
+        
+        NSLayoutConstraint.activate([
+            webView.topAnchor.constraint(equalTo: view.topAnchor),
+            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            webView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+        
+        view.bringSubviewToFront(progressView)
     }
 }
 

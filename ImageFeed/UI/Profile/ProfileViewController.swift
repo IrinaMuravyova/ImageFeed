@@ -69,7 +69,7 @@ final class ProfileViewController: UIViewController {
     private var profileImageServiceObserver: NSObjectProtocol?
     
     // MARK: - For better testing
-    private(set) var presenter: ProfilePresenterProtocol!
+    private(set) var presenter: ProfilePresenterProtocol?
     
     func configure(_ presenter: ProfilePresenterProtocol) {
         self.presenter = presenter
@@ -81,7 +81,12 @@ final class ProfileViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         setupConstraints()
-        presenter.viewDidLoad()
+        
+        if presenter == nil {
+            presenter = ProfileViewPresenter()
+            presenter?.view = self
+        }
+        presenter?.viewDidLoad()
     }
 }
 
@@ -125,7 +130,7 @@ extension ProfileViewController {
     
     // MARK: - Actions
     @objc func logoutButtonTapped() {
-        presenter.logoutButtonTapped()
+        presenter?.logoutButtonTapped()
     }
 }
 
@@ -178,7 +183,7 @@ extension ProfileViewController: ProfileViewControllerProtocol {
         alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
         alert.addAction(
             UIAlertAction(title: "Выйти", style: .destructive) { [weak self] _ in
-                self?.presenter.logoutButtonTapped()
+                self?.presenter?.logoutButtonTapped()
             }
         )
         
