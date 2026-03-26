@@ -27,6 +27,9 @@
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MYa-AF-xjl">
                                 <rect key="frame" x="16" y="646" width="361" height="48"/>
+                                <accessibility key="accessibilityConfiguration">
+                                    <bool key="isElement" value="NO"/>
+                                </accessibility>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="7LP-iz-eUa"/>
                                 </constraints>
@@ -78,7 +81,7 @@
         <!--Web View View Controller-->
         <scene sceneID="i38-dV-Vcd">
             <objects>
-                <viewController id="pmx-Dm-NSl" customClass="WebViewViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WebViewViewController" id="pmx-Dm-NSl" customClass="WebViewViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="tbg-Iw-Z7O">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

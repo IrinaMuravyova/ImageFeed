@@ -9,12 +9,11 @@ import UIKit
 import Kingfisher
 
 // MARK: - ImagesListViewController
-final class ImagesListViewController: UIViewController {
+class ImagesListViewController: UIViewController {
     // MARK: - IBOutlets
     @IBOutlet private weak var tableView: UITableView!
     
     // MARK: - Properties
-    private var photos: [Photo] = []
     private let showSingleImageSegueIdentifier = "ShowSingleImage"
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -24,7 +23,9 @@ final class ImagesListViewController: UIViewController {
     }()
     
     private let imagesListService = ImagesListService.shared
-
+    
+    var photos: [Photo] = []
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,7 +49,7 @@ final class ImagesListViewController: UIViewController {
                 assertionFailure("Invalid segue destination")
                 return
             }
-
+            
             let photo = photos[indexPath.row]
             if let url = URL(string: photo.largeImageURL) {
                 viewController.imageURL = url
@@ -58,13 +59,13 @@ final class ImagesListViewController: UIViewController {
             super.prepare(for: segue, sender: sender)
         }
     }
-
+    
     // MARK: - Private Methods
     private func setupTableView() {
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
     }
     
-    @objc private func updateTableViewAnimated() {
+    @objc func updateTableViewAnimated() {
         let oldCount = photos.count
         photos = imagesListService.photos
         let newCount = photos.count
@@ -109,12 +110,12 @@ extension ImagesListViewController: UITableViewDataSource {
         
         let photo = photos[indexPath.row]
         let placeholderImage = UIImage(resource: .stub)
-  
+        
         if let url = URL(string: photo.thumbImageURL) {
             imageListCell.feedImageView.kf.indicatorType = .activity
             
             setupPlaceholder(for: imageListCell.feedImageView)
-
+            
             imageListCell.feedImageView.kf.setImage(
                 with: url,
                 placeholder: placeholderImage,
@@ -180,7 +181,7 @@ extension ImagesListViewController: UITableViewDelegate {
 }
 
 extension ImagesListViewController: ImagesListCellDelegate {
-
+    
     func imagesListCellDidTapLike(_ cell: ImagesListCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
         

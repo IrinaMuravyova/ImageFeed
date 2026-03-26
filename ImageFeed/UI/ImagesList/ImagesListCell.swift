@@ -12,7 +12,7 @@ protocol ImagesListCellDelegate: AnyObject {
     func imagesListCellDidTapLike(_ cell: ImagesListCell)
 }
 
-final class ImagesListCell: UITableViewCell {
+class ImagesListCell: UITableViewCell {
     static let reuseIdentifier = "ImagesListCell"
     
     @IBOutlet private weak var gradientView: GradientView!
@@ -49,6 +49,7 @@ final class ImagesListCell: UITableViewCell {
             ? UIImage(resource: .active)
             : UIImage(resource: .noActive)
         
-        likeButton.setImage(likeImage, for: .normal)                   
+        likeButton.setImage(likeImage, for: .normal)
+        likeButton.accessibilityIdentifier = isLiked ? "like button on" : "like button off"
     }
 }
